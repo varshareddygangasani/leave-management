@@ -1,0 +1,37 @@
+@startuml Leave Request Process
+
+skinparam ActivityBackgroundColor White
+skinparam ActivityBorderColor Black
+skinparam ArrowColor Black
+
+start
+
+:Employee Login;
+
+if (Login Successful?) then (yes)
+    :View Dashboard;
+    :Fill Leave Request Form;
+    :Submit Request;
+    
+    fork
+        :Send Email to Admin;
+    fork again
+        :Update System Records;
+    end fork
+    
+    :Admin Reviews Request;
+    
+    if (Request Approved?) then (yes)
+        :Update Leave Balance;
+        :Send Approval Notification;
+    else (no)
+        :Send Rejection Notification;
+    endif
+    
+else (no)
+    :Show Error Message;
+endif
+
+stop
+
+@enduml 

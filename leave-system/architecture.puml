@@ -1,0 +1,82 @@
+@startuml Leave Management System Architecture
+
+!define RECTANGLE class
+
+skinparam componentStyle uml2
+skinparam component {
+  BackgroundColor White
+  BorderColor Black
+  ArrowColor Black
+}
+
+rectangle "Frontend (React)" {
+  [Login Component]
+  [Dashboard Component]
+  [Leave Request Form]
+  [Leave History]
+  [User Profile]
+  [Admin Panel]
+}
+
+rectangle "Backend (Node.js/Express)" {
+  [Authentication Controller]
+  [Leave Controller]
+  [User Controller]
+  [Middleware] as MW
+  note right of MW : JWT Authentication
+}
+
+database "MongoDB" {
+  [User Collection]
+  [Leave Collection]
+}
+
+cloud "External Services" {
+  [Email Service]
+}
+
+' Frontend to Backend Communication
+[Login Component] --> [Authentication Controller] : HTTP/REST
+[Dashboard Component] --> [Leave Controller] : HTTP/REST
+[Leave Request Form] --> [Leave Controller] : HTTP/REST
+[Leave History] --> [Leave Controller] : HTTP/REST
+[User Profile] --> [User Controller] : HTTP/REST
+[Admin Panel] --> [User Controller] : HTTP/REST
+
+' Backend Components Communication
+[Authentication Controller] --> MW : Uses
+[Leave Controller] --> MW : Uses
+[User Controller] --> MW : Uses
+
+' Database Communication
+[Authentication Controller] --> [User Collection] : CRUD
+[Leave Controller] --> [Leave Collection] : CRUD
+[User Controller] --> [User Collection] : CRUD
+
+' External Service Communication
+[Leave Controller] ..> [Email Service] : Notifications
+
+' Data Models
+note right of [User Collection]
+  User {
+    email: String
+    password: String (hashed)
+    name: String
+    role: Enum
+    timestamps
+  }
+end note
+
+note right of [Leave Collection]
+  Leave {
+    userId: ObjectId
+    startDate: Date
+    endDate: Date
+    type: String
+    status: Enum
+    reason: String
+    timestamps
+  }
+end note
+
+@enduml 

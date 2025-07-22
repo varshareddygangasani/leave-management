@@ -1,0 +1,71 @@
+@startuml Leave Management System Class Diagram
+
+skinparam classAttributeIconSize 0
+skinparam class {
+    BackgroundColor White
+    BorderColor Black
+    ArrowColor Black
+}
+
+class User {
+    -id: String
+    -name: String
+    -email: String
+    -password: String
+    -role: String
+    -createdAt: Date
+    +getId(): String
+    +getName(): String
+    +setName(name: String): void
+    +getEmail(): String
+    +getRole(): String
+    +verifyPassword(password: String): Boolean
+}
+
+class Leave {
+    -id: String
+    -userId: String
+    -startDate: Date
+    -endDate: Date
+    -type: String
+    -status: String
+    -reason: String
+    -createdAt: Date
+    +getId(): String
+    +getUserId(): String
+    +getStatus(): String
+    +setStatus(status: String): void
+    +getDuration(): Number
+    +isApproved(): Boolean
+}
+
+class LeaveBalance {
+    -userId: String
+    -year: Number
+    -total: Number
+    -used: Number
+    -remaining: Number
+    +getRemaining(): Number
+    +updateBalance(days: Number): void
+    +resetYearlyBalance(): void
+}
+
+class Notification {
+    -id: String
+    -userId: String
+    -message: String
+    -type: String
+    -isRead: Boolean
+    -createdAt: Date
+    +markAsRead(): void
+    +getMessage(): String
+    +getType(): String
+}
+
+' Relationships
+User "1" -- "*" Leave : has
+User "1" -- "1" LeaveBalance : has
+User "1" -- "*" Notification : receives
+Leave "*" -- "1..*" Notification : generates
+
+@enduml 

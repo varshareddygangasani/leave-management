@@ -1,0 +1,52 @@
+@startuml Simple Leave Management System Use Cases
+
+left to right direction
+skinparam actorStyle awesome
+
+' Actor definitions
+:Employee: as employee
+:Admin: as admin
+:System: as system
+
+rectangle "Leave Management System" {
+  ' Basic use cases
+  usecase "Login" as UC1
+  usecase "Submit Leave Request" as UC2
+  usecase "View Leave History" as UC3
+  usecase "Cancel Leave" as UC4
+  
+  ' Admin use cases
+  usecase "Manage Users" as UC5
+  usecase "Approve/Reject Leave" as UC6
+  usecase "View Reports" as UC7
+  
+  ' System use cases
+  usecase "Send Notifications" as UC8
+  usecase "Update Leave Balance" as UC9
+}
+
+' Employee relationships
+employee --> UC1
+employee --> UC2
+employee --> UC3
+employee --> UC4
+
+' Admin relationships
+admin --> UC1
+admin --> UC5
+admin --> UC6
+admin --> UC7
+
+' System relationships
+system --> UC8
+system --> UC9
+
+' Include relationships
+UC2 ..> UC8 : <<include>>
+UC6 ..> UC8 : <<include>>
+UC2 ..> UC9 : <<include>>
+
+note "All users must login first" as N1
+UC1 .. N1
+
+@enduml 
